@@ -10,10 +10,11 @@
             "includePath": [
                 "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/include",
                 "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/src",
+                "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/.pio/libdeps/leonardo/CRC32/src",
                 "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/.pio/libdeps/leonardo/CAN_BUS_Shield",
+                "C:/Users/kvp/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
                 "C:/Users/kvp/.platformio/packages/framework-arduino-avr/cores/arduino",
                 "C:/Users/kvp/.platformio/packages/framework-arduino-avr/variants/leonardo",
-                "C:/Users/kvp/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
                 "C:/Users/kvp/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
                 "C:/Users/kvp/.platformio/packages/framework-arduino-avr/libraries/HID/src",
                 "C:/Users/kvp/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
@@ -25,10 +26,11 @@
                 "path": [
                     "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/include",
                     "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/src",
+                    "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/.pio/libdeps/leonardo/CRC32/src",
                     "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/.pio/libdeps/leonardo/CAN_BUS_Shield",
+                    "C:/Users/kvp/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
                     "C:/Users/kvp/.platformio/packages/framework-arduino-avr/cores/arduino",
                     "C:/Users/kvp/.platformio/packages/framework-arduino-avr/variants/leonardo",
-                    "C:/Users/kvp/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
                     "C:/Users/kvp/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
                     "C:/Users/kvp/.platformio/packages/framework-arduino-avr/libraries/HID/src",
                     "C:/Users/kvp/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
@@ -37,7 +39,7 @@
                 ]
             },
             "defines": [
-                "PLATFORMIO=50100",
+                "PLATFORMIO=50101",
                 "ARDUINO_AVR_LEONARDO",
                 "F_CPU=16000000L",
                 "ARDUINO_ARCH_AVR",
