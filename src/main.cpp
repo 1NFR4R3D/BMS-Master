@@ -24,7 +24,7 @@
  *   Error handling - 
  *     Positive values or 0 for no error.
  *     Negative values indicate errors.
- *     Errors with greater than ____ are fatal errors, OK signal will not be sent.      !!!!!!!!!!!!FILL THIS VALUE IN LATER!!!!!!!!!!!!
+ *     Errors with greater than ____ are fatal errors, OK signal will not be sent.                                       !!!!!!!!!!!!FILL THIS VALUE IN LATER!!!!!!!!!!!!
  *     All other errors will send broadcast on CAN bus. The driver interface/VCU should acknowledge this and alert user.
  *     Update the list here as new error codes are required.
  *       No error                           - >=(0)
@@ -37,9 +37,12 @@
  * Includeed Libraries
  */
 #include <Arduino.h>
+#include <projconst.h>
+#include <errno.h>
 #include <SPI.h>
 #include <mcp_can.h>
 #include <CRC32.h>
+#include <CSV_Parser.h>
 
 MCP_CAN CAN(10);                                            // Set CS to pin 10
 
@@ -49,24 +52,13 @@ MCP_CAN CAN(10);                                            // Set CS to pin 10
 void MCP2515_ISR(void);
 int slave_ping(int);
 void slave_tx(int, int, int);
+String slave_rx(void);
 float read_current(void);
 float read_voltage(int);
 
 /* 
  * Global variables
  */
-// Internal communication Device IDs
-#define MYID 1                                             // ID of this device. Ranges bet'n  1 to 254
-#define VSENSE_NUM 3                                       // Number of slaves for voltage sensing
-#define VSENSE_MIN 2                                       // ** DO NOT CHANGE THIS VALUE **
-#define FCTRL_NUM 2                                        // Number of slaves for fan control
-#define FCTRL_MIN 129                                      // ** DO NOT CHANGE THIS VALUE **
-#define ISENSE_SLAVE 127                                   // Slave ID of current sensing slave
-#define CELL_MAX 90                                        // Number of cells in the system
-#define VSENSE_MAX_CELLS 15
-// Internal communication Message IDs
-#define PING 2
-#define VAL_PREFIX 1
 // Error handling
 int err_flag=0;
 // CAN
@@ -89,7 +81,7 @@ void setup() {
     Serial.println("CAN BUS init ok!");
   } else {
     Serial.println("CAN BUS init failed!");
-    err_flag = -9;
+    err_flag = ENOCAN;
   }
   attachInterrupt(0, MCP2515_ISR, FALLING); // start interrupt
 
@@ -104,7 +96,7 @@ void setup() {
       Serial.println(" is alive.");
     } else {
       Serial.println("is not responding. Please check the system.");
-      err_flag = -10;
+      err_flag = ENOSLAVE_F;
     }
   }
 
@@ -114,7 +106,7 @@ void setup() {
     Serial.println(" is alive.");
   } else {
     Serial.println(" is not responding. Please check the system.");
-    err_flag = -10;
+    err_flag = ENOSLAVE_F;
   }
 
   // Fan Control Slaves
@@ -124,7 +116,7 @@ void setup() {
       Serial.println(" is alive.");
     } else {
       Serial.println("is not responding. Please check the system.");
-      err_flag = -11;
+      err_flag = ENOSLAVE_NF;
     }
   }
 
@@ -167,17 +159,16 @@ void MCP2515_ISR(void)
 
 int slave_ping(int destID)
 {
-  int ret = 0;
+  int ret = -1;
   //Ping the slave here
   slave_tx(destID, 0, 0);
   // Implement Rx function, check response, pass if ping passed.
-  /*
-  int resp = slave_rx_int(destID);
-  if resp = destID
-  ret = 0
-  else 
-  ret = -1
-   */
+  String ping_response = slave_rx();
+  CSV_Parser cp(ping_response.c_str(),"-ud--",false);
+  cp.parseLeftover();
+  if ((int16_t)cp[0] == destID && (int16_t)cp[3] == destID) {
+    ret = 0;
+  }
   return ret;
 }
 
@@ -190,9 +181,44 @@ void slave_tx(int destID, int msgID, int resp)
   Serial1.print('$' + packet);
 }
 
+String slave_rx(void)
+{
+  // Receive message from any slave
+  // Wait until message is here
+  while(Serial1.available() < 10);
+  String rxString = Serial1.readStringUntil('%');
+  
+  // Extract CRC
+  String crc = rxString.substring('&','%');
+  crc.remove(0);
+  
+  // Extract actual payload
+  uint8_t endIndex = rxString.lastIndexOf('&');
+  uint8_t lenIndex = rxString.length();
+  rxString.remove(endIndex, (lenIndex - endIndex));
+  
+  //Verify checksum match
+  uint32_t crcsum = CRC32::calculate(rxString.c_str(),rxString.length());
+  if(!crc.equals(String(crcsum))){
+    // If CRC does not match, return empty string, set error flag
+    err_flag = ECRCINVAL;
+    return String();
+  }
+
+  // Check if data is for us
+  CSV_Parser cp(rxString.c_str(),"-ud--",false);
+  cp.parseLeftover();
+  if ((int16_t)cp[1] != MYID) {
+    return String();
+  }
+
+  // Return payload
+  return rxString;
+}
+
 float read_current(void)
 {
-  float resp;
+  float resp = 5000;
   slave_tx(ISENSE_SLAVE,10,0);
   // Implement Rx function, return response
   /*

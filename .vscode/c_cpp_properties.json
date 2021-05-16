@@ -10,6 +10,10 @@
             "includePath": [
                 "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/include",
                 "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/src",
+                "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/lib/projconst",
+                "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/lib/errno",
+                "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/.pio/libdeps/leonardo/CSV Parser",
+                "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/.pio/libdeps/leonardo/SD/src",
                 "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/.pio/libdeps/leonardo/CRC32/src",
                 "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/.pio/libdeps/leonardo/CAN_BUS_Shield",
                 "C:/Users/kvp/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
@@ -26,6 +30,10 @@
                 "path": [
                     "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/include",
                     "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/src",
+                    "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/lib/projconst",
+                    "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/lib/errno",
+                    "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/.pio/libdeps/leonardo/CSV Parser",
+                    "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/.pio/libdeps/leonardo/SD/src",
                     "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/.pio/libdeps/leonardo/CRC32/src",
                     "c:/Users/kvp/Documents/PlatformIO/Projects/BMS-Master/.pio/libdeps/leonardo/CAN_BUS_Shield",
                     "C:/Users/kvp/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
