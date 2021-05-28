@@ -308,6 +308,6 @@ float read_temp(uint8_t slaveID,uint8_t tempID)
 
 void fan_ctrl(uint8_t slaveID,uint8_t fanNum,bool status) 
 {
-  // stuff
+  // Enable or disable fan based on the value of status
   slave_tx(slaveID,(status?FAN_CMD_EN:FAN_CMD_DIS),fanNum);
 }

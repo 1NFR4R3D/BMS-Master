@@ -1,0 +1,37 @@
+static LUT_temp[] = {tempRef1,tempRef2,tempRef3,tempRef4,tempRef5}
+static LUT_capacity[] = {capacityRef1,capacityRef2,capacityRef3,capacityRef4,capacityRef5}
+
+function calculateSoc(tempCurrent, currentPrevious, currentCurrent, socPrevious)
+{
+    capacityCurrent = getFromLutCapacity(tempCurrent)
+    capacityCurrentPrime = capacityCurrent*3600
+    integrationResult = capacityCurrentPrime*(((currentCurrent-currentPrevious)^2)/2)
+    socCurrent = integrationResult - socPrevious
+}
+
+function getFromLutCapacity(temp) {
+
+    // Get closest lower value in LUT
+    for ( i = 0; i < 5 /*(LUT size)*/; i++) {
+        if (temp < LUT_temp[i]) {
+            tempRefLessThan = LUT_temp[i]
+            indexLower = i
+        } else {
+            break
+        }
+    }
+
+    // Get closest higher value in LUT
+    for ( i = 5 /*(LUT size)*/; i > 0; i--) {
+        if (temp > LUT_temp[i-1]) {
+            tempRefGreaterThan = LUT_temp[i-1]
+            indexHigher = i-1
+        } else {
+            break
+        }
+    }
+
+    gradient = (LUT_capacity[indexHigher] - LUT_capacity[indexLower])/(tempRefGreaterThan - tempRefLessThan)
+    capacity = (gradient * (temp - tempRefLessThan)) + LUT_capacity[indexHigher]
+    return capacity
+}
